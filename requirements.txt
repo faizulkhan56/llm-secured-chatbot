@@ -1,4 +1,5 @@
-openai
+openai>=1.0.0
 streamlit
 python-dotenv
-llm-guard
+llm-guard==0.3.10
+numpy==1.26.4

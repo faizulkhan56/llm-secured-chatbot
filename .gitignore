@@ -1,0 +1,75 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env
+.venv/
+
+# Environment variables and secret keys
+.env
+.env.*
+
+# VSCode settings (if applicable)
+.vscode/
+
+# macOS and Linux system files
+.DS_Store
+Thumbs.db
+
+# Jupyter/IPython Notebook checkpoints
+.ipynb_checkpoints
+
+# Streamlit cache and logs
+.streamlit/
+
+# Python egg metadata
+*.egg-info/
+*.egg
+
+# Pip logs and wheels
+pip-log.txt
+pip-delete-this-directory.txt
+*.whl
+
+# PyInstaller
+*.spec
+dist/
+build/
+
+# Local test and logs
+*.log
+test_guard.py
+
+# OS generated files
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Unit test cache
+.tox/
+.nox/
+.cache/
+pytest_cache/
+
+# MyPy type checker
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# coverage reports
+.coverage
+htmlcov/
+coverage.xml
+
+# LLM Guard cache/models (if any local models used)
+llm_guard_cache/
+

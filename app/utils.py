@@ -1,33 +1,39 @@
+from promptme_simulator import load_all_challenge_prompts
+from llm_guard_init import prompt_scanner, output_scanner
 import openai
-from app.llm_guard_init import prompt_scanner, output_scanner
-from app.promptme_simulator import load_all_challenge_prompts
-import os
 
 def evaluate_challenges():
-    results = []
     prompts = load_all_challenge_prompts()
+    results = []
 
     for item in prompts:
-        prompt = item["prompt"]
         challenge = item["challenge"]
+        prompt = item["prompt"]
 
-        cleaned, issues = prompt_scanner.scan(prompt)
-        if issues:
-            results.append((challenge, prompt, "❌ Blocked by Input Scanner"))
-            continue
+        cleaned, prompt_issues = prompt_scanner(prompt)
 
-        try:
-            completion = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo",
-                messages=[{"role": "user", "content": cleaned}]
-            )
-            raw = completion.choices[0].message["content"]
-            safe, out_issues = output_scanner.scan(raw)
+        if prompt_issues:
+            status = "Blocked (input)"
+        else:
+            try:
+                completion = openai.ChatCompletion.create(
+                    model="gpt-3.5-turbo",
+                    messages=[{"role": "user", "content": cleaned}]
+                )
+                raw_response = completion.choices[0].message["content"]
+                _, output_issues = output_scanner(raw_response)
+                if output_issues:
+                    status = "Blocked (output)"
+                else:
+                    status = "Passed"
+            except Exception:
+                status = "API Error"
 
-            verdict = "✅ Passed" if not out_issues else "⚠️ Blocked by Output Scanner"
-            results.append((challenge, prompt, verdict))
-
-        except Exception as e:
-            results.append((challenge, prompt, f"⚠️ Error: {e}"))
+        results.append({
+            "challenge": challenge,
+            "prompt": prompt,
+            "status": status
+        })
 
     return results
+
